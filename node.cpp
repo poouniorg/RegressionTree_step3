@@ -11,7 +11,7 @@ Node::Node()
       left_id(-1), right_id(-1)
 {}
 
-// parse_condition: parses string and stores structured data 
+// parse_condition: parse le string et stocke les données structurées
 bool Node::parse_condition(char* cond) {
     istringstream iss(cond);
     string feat_str, op_str;
@@ -27,7 +27,7 @@ bool Node::parse_condition(char* cond) {
     else if (feat_str == "waiting_time") feature = WAITING_TIME;
     else return false;
 
-    // Parse operator
+    // Parse operateur
     if (op_str == "<=") op = OP_LE;
     else if (op_str == "<")  op = OP_LT;
     else if (op_str == "=")  op = OP_EQ;

@@ -1,36 +1,36 @@
-// estimate2.cpp
+// estimate3.cpp
 #include <iostream>
 #include<fstream>
 #include "node.h"
 using namespace std;
 
-// Define tree size (adjust as needed)
+// Il faut une estimation maximale du nombre de nœuds dans l'arbre.
 const int MAX_NODES = 32;
 Node tree[MAX_NODES];
 
 
-// Reads tree from file in format: node_id,left_id,right_id,condition_or_value
+// Lit l'arbre à partir d'un fichier au format: node_id,left_id,right_id,condition_or_value
 bool read_tree(char* filename) {
-    for (int i = 0; i < MAX_NODES; ++i) // Initialize all nodes as null
+    for (int i = 0; i < MAX_NODES; ++i) // Initialiser tous les nœuds à null
         tree[i] = Node();
 
     ifstream fp(filename);
-    if (!fp) return 0.0; // or handle error
+    if (!fp) return 0.0; // ou gérer les erreurs
 
     char line[256];
     int node_id, left_id, right_id;
     char cond_val[128];
     while (fp.getline(line, sizeof(line))) {
         if (sscanf(line, "%d,%d,%d,%127[^\n]", &node_id, &left_id, &right_id, cond_val) != 4) 
-            return false; //signal error
-        // fill-in the node
+            return false; // signaler une erreur
+        // remplir le nœud
         tree[node_id].set_children(left_id, right_id);
         if (left_id == -1 && right_id == -1) {
-            // Leaf node: rest is a value
+            // Nœud feuille : le reste est une valeur
             tree[node_id].mark_as_leaf();
             tree[node_id].set_value(atof(cond_val));
         } else {
-            // Internal node: cond_val is a condition
+            // Nœud interne : cond_val est une condition
             if (!tree[node_id].parse_condition(cond_val)) {
                 cerr << "Error: Failed to parse condition: " << cond_val << endl;
                 fp.close();
@@ -42,10 +42,9 @@ bool read_tree(char* filename) {
     return true;
 }
 
-
-// Inference function using array layout
+// Fonction d'inférence utilisant array 
 float estimate(float features[FEATURE_COUNT]) {
-    int idx = 1; // start at root
+    int idx = 1; // commencer à la racine
 
     while (idx < MAX_NODES) {
         if (tree[idx].test_leaf()) {
@@ -55,12 +54,12 @@ float estimate(float features[FEATURE_COUNT]) {
         idx = go_left ? tree[idx].get_left() : tree[idx].get_right();
     }
 
-    return 0.0; // a non-void function must always return
+    return 0.0; // une fonction non void doit toujours retourner
 }
+
 
 // Main program
 int main() {
-
     char choice;
     float age, weight_kg, height_cm, waiting_time;
 

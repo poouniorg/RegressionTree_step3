@@ -11,9 +11,6 @@ Node tree[MAX_NODES];
 
 // Lit l'arbre à partir d'un fichier au format: node_id,left_id,right_id,condition_or_value
 bool read_tree(char* filename) {
-    for (int i = 0; i < MAX_NODES; ++i) // Initialiser tous les nœuds à null
-        tree[i] = Node();
-
     ifstream fp(filename);
     if (!fp) return 0.0; // ou gérer les erreurs
 
